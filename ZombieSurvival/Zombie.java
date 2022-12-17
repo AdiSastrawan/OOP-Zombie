@@ -10,16 +10,25 @@ import java.util.List;
  */
 public class Zombie extends Actor
 {
-
+    public Zombie(){
+        
+    }
+   
     public int health=2;
+    private int invisibleTime =0;
     public void act()
     {
+         if(this != null){
+             invisibleTime--;
+            if(health==0){
+                MyWorld myWorld = (MyWorld) getWorld();
+                myWorld.killedZombie();
+                getWorld().removeObject(this);
+            }else{
+                chase(3);
+            }
+         }
         
-        if(health==0){
-            getWorld().removeObject(this);
-        }else{
-            chase(3);
-        }
         
 
     }
@@ -29,6 +38,15 @@ public class Zombie extends Actor
            Actor player = (Actor)players.get(0);
             turnTowards(player.getX(), player.getY());
             move(speed); 
+            if(isTouching(Player.class)){
+                if(invisibleTime <=0){
+                    Player p= (Player) player;
+                    p.getHit();
+                    invisibleTime=30;
+                }
+                
+                
+            }
         }
         
     }

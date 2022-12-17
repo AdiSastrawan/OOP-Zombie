@@ -15,10 +15,11 @@ public class Bullet extends Actor
     public Bullet(){
         
     }
-    int damage = 1;
+    private int damage = 1;
+    private int bulletSpeed = 20;
     public void act()
     {
-        move(20);
+        move(bulletSpeed);
         hitZombie();
     }
     private void hitZombie(){

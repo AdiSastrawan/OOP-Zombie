@@ -13,19 +13,37 @@ public class Player extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     private boolean shooting;
-    int firespeed=0;
+    private int firespeed=15;
+    private int delay = 0;
+    private int health = 3;
     public Player(){
+    }
+    public void getHit(){
+        health--;
+    }
+    public void fireUp(){
+        firespeed-=3;
+    }
+    public int getPlayerHealth(){
+        return health;
     }
     public void act()
     {
-        playerMove(5);
-        turnToCursor();
-        shootBullet();
-        firespeed++;
+        if(health>0){
+            playerMove(5);
+            turnToCursor();
+            shootBullet();
+            delay++;    
+        }else{
+            Death();
+        }
+        
         
 
     }
-    
+    private void Death(){
+        getWorld().removeObject(this);
+    }
     private void playerMove(int speed){
         if(Greenfoot.isKeyDown("a")){
             setLocation(getX()-speed,getY());
@@ -50,11 +68,11 @@ public class Player extends Actor
     private void shootBullet(){
         if (shooting && (Greenfoot.mouseDragEnded(null) || Greenfoot.mouseClicked(null))) shooting = false;
         if (!shooting && Greenfoot.mousePressed(null)) shooting = true;
-        if(shooting==true&&firespeed>30){
+        if(shooting==true&&delay>firespeed){
             Bullet bullet = new Bullet();
             getWorld().addObject(bullet,getX(),getY()); 
             bullet.setRotation(getRotation());
-            firespeed=0;
+            delay=0;
         }
         
     }
